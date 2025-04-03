@@ -30,23 +30,26 @@ main {
     display: flex;
     flex-direction: column;
     gap: 30px;
+    width: 100%;
+    min-height: 100vh;
 }
 
-@media (min-width: 768px) {
-    main {
-        flex-direction: row;
-    }
-    
-    .input-section, .output-section {
-        width: 50%;
-    }
-}
-
-.input-section, .output-section {
+.input-section {
     background-color: white;
     border-radius: 8px;
     padding: 20px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    order: 1;
+}
+
+.output-section {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    order: 2;
 }
 
 h2 {
@@ -57,7 +60,7 @@ h2 {
 
 textarea#code-input {
     width: 100%;
-    min-height: 300px;
+    min-height: 200px;
     padding: 15px;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -84,14 +87,17 @@ button#calculate-btn:hover {
 }
 
 #output-display {
-    min-height: 300px;
+    min-height: 200px;
     padding: 15px;
     border: 1px solid #ddd;
     border-radius: 4px;
     background-color: #f9f9f9;
     font-family: monospace;
     white-space: pre-wrap;
+    word-wrap: break-word;
     overflow-x: auto;
+    overflow-y: auto;
+    max-height: 500px;
 }
 
 footer {

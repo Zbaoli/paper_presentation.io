@@ -1,69 +1,118 @@
+// 密码子频率表
+const codonFrequencies = {
+    'M': {'ATG': 1.0000},
+    'V': {'GTG': 0.8571, 'GTA': 0.0714, 'GTC': 0.0714},
+    'S': {'AGC': 0.0909, 'TCC': 0.9091},
+    'K': {'AAG': 1.0000},
+    'G': {'GGC': 0.9600, 'GGT': 0.0400},
+    'E': {'GAG': 0.8571, 'GAA': 0.1429},
+    'A': {'GCA': 0.1000, 'GCC': 0.7000, 'GCG': 0.2000},
+    'I': {'ATC': 0.8571, 'ATT': 0.1429},
+    'F': {'TTC': 1.0000},
+    'R': {'CGG': 0.1818, 'CGC': 0.7273, 'AGG': 0.0909},
+    'H': {'CAC': 1.0000},
+    'N': {'AAC': 1.0000},
+    'P': {'CCC': 0.7692, 'CCT': 0.2308},
+    'Y': {'TAC': 0.9167, 'TAT': 0.0833},
+    'T': {'ACC': 0.9375, 'ACA': 0.0625},
+    'Q': {'CAG': 1.0000},
+    'L': {'CTG': 0.7692, 'CTC': 0.0769, 'TTG': 0.1538},
+    'W': {'TGG': 1.0000},
+    'D': {'GAC': 1.0000}
+};
+
+// 遗传密码表（标准遗传密码）
+const geneticCode = {
+    'ATA':'I', 'ATC':'I', 'ATT':'I', 'ATG':'M',
+    'ACA':'T', 'ACC':'T', 'ACG':'T', 'ACT':'T',
+    'AAC':'N', 'AAT':'N', 'AAA':'K', 'AAG':'K',
+    'AGC':'S', 'AGT':'S', 'AGA':'R', 'AGG':'R',
+    'CTA':'L', 'CTC':'L', 'CTG':'L', 'CTT':'L',
+    'CCA':'P', 'CCC':'P', 'CCG':'P', 'CCT':'P',
+    'CAC':'H', 'CAT':'H', 'CAA':'Q', 'CAG':'Q',
+    'CGA':'R', 'CGC':'R', 'CGG':'R', 'CGT':'R',
+    'GTA':'V', 'GTC':'V', 'GTG':'V', 'GTT':'V',
+    'GCA':'A', 'GCC':'A', 'GCG':'A', 'GCT':'A',
+    'GAC':'D', 'GAT':'D', 'GAA':'E', 'GAG':'E',
+    'GGA':'G', 'GGC':'G', 'GGG':'G', 'GGT':'G',
+    'TCA':'S', 'TCC':'S', 'TCG':'S', 'TCT':'S',
+    'TTC':'F', 'TTT':'F', 'TTA':'L', 'TTG':'L',
+    'TAC':'Y', 'TAT':'Y', 'TAA':'*', 'TAG':'*',
+    'TGC':'C', 'TGT':'C', 'TGA':'*', 'TGG':'W'
+};
+
+// 反转遗传密码表，以便从氨基酸到密码子
+const reverseGeneticCode = {};
+for (const [codon, aa] of Object.entries(geneticCode)) {
+    if (!reverseGeneticCode[aa]) {
+        reverseGeneticCode[aa] = [];
+    }
+    reverseGeneticCode[aa].push(codon);
+}
+
+// DNA序列优化函数
+function optimizeDNA(dnaSequence) {
+    // 确保序列长度是3的倍数
+    if (dnaSequence.length % 3 !== 0) {
+        throw new Error("DNA序列的长度必须是3的倍数");
+    }
+
+    // 分割成密码子
+    const originalCodons = [];
+    for (let i = 0; i < dnaSequence.length; i += 3) {
+        originalCodons.push(dnaSequence.slice(i, i + 3));
+    }
+
+    // 将原始DNA序列翻译成氨基酸序列
+    const aminoAcids = originalCodons.map(codon => geneticCode[codon.toUpperCase()]);
+
+    // 优化后的密码子列表
+    const optimizedCodons = [];
+
+    // 选择最优的密码子
+    for (let i = 0; i < originalCodons.length; i++) {
+        const codon = originalCodons[i];
+        const aa = aminoAcids[i];
+        
+        if (codonFrequencies[aa]) {
+            // 选择频率最高的密码子
+            const bestCodon = Object.entries(codonFrequencies[aa])
+                .reduce((a, b) => a[1] > b[1] ? a : b)[0];
+            optimizedCodons.push(bestCodon);
+        } else {
+            // 如果没有提供该氨基酸的频率信息，保留原始密码子
+            optimizedCodons.push(codon.toUpperCase());
+        }
+    }
+
+    // 重新构建优化后的DNA序列
+    return optimizedCodons.join('');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const codeInput = document.getElementById('code-input');
     const calculateBtn = document.getElementById('calculate-btn');
     const outputDisplay = document.getElementById('output-display');
     
+    // 添加示例DNA序列
+    codeInput.value = `atggccccaaagaagaagcggaaggtcggtatccacggagtcccagcagccaagcggaactacatcctgggcctggacatcggcatcaccagcgtgggctacggcatcatcgactacgagacacgggacgtgatcgatgccggcgtgcggctgttcaaagaggccaacgtggaaaacaacgagggcaggcggagcaagagaggcgccagaaggctgaagcggcggaggcggcatagaatccagagagtgaagaagctgctgttcgactacaacctgctgaccgaccacagcgagctgagcggcatcaacccctacgaggccagagtgaagggcctgagccagaagctgagcgaggaagagttctctgccgccctgctgcacctggccaagagaagaggcgtgcacaacgtgaacgaggtggaagaggacaccggcaacgagctgtccaccaaagagcagatcagccggaacagcaaggccctggaagagaaatacgtggccgaactgcagctggaacggctgaagaaagacggcgaagtgcggggcagcatcaacagattcaagaccagcgactacgtgaaagaagccaaacagctgctgaaggtgcagaaggcctaccaccagctggaccagagcttcatcgacacctacatcgacctgctggaaacccggcggacctactatgagggacctggcgagggcagccccttcggctggaaggacatcaaagaatggtacgagatgctgatgggccactgcacctacttccccgaggaactgcggagcgtgaagtacgcctacaacgccgacctgtacaacgccctgaacgacctgaacaatctcgtgatcaccagggacgagaacgagaagctggaatattacgagaagttccagatcatcgagaacgtgttcaagcagaagaagaagcccaccctgaagcagatcgccaaagaaatcctcgtgaacgaagaggatattaagggctacagagtgaccagcaccggcaagcccgagttcaccaacctgaaggtgtaccacgacatcaaggacattaccgcccggaaagagattattgagaacgccgagctgctggatcagattgccaagatcctgaccatctaccagagcagcgaggacatccaggaagaactgaccaatctgaactccgagctgacccaggaagagatcgagcagatctctaatctgaagggctataccggcacccacaacctgagcctgaaggccatcaacctgatcctggacgagctgtggcacaccaacgacaaccagatcgctatcttcaaccggctgaagctggtgcccaagaaggtggacctgtcccagcagaaagagatccccaccaccctggtggacgacttcatcctgagccccgtcgtgaagagaagcttcatccagagcatcaaagtgatcaacgccatcatcaagaagtacggcctgcccaacgacatcattatcgagctggcccgcgagaagaactccaaggacgcccagaaaatgatcaacgagatgcagaagcggaaccggcagaccaacgagcggatcgaggaaatcatccggaccaccggcaaagagaacgccaagtacctgatcgagaagatcaagctgcacgacatgcaggaaggcaagtgcctgtacagcctggaagccatccctctggaagatctgctgaacaaccccttcaactatgaggtggaccacatcatccccagaagcgtgtccttcgacaacagcttcaacaacaaggtgctcgtgaagcaggaagaaaacagcaagaagggcaaccggaccccattccagtacctgagcagcagcgacagcaagatcagctacgaaaccttcaagaagcacatcctgaatctggccaagggcaagggcagaatcagcaagaccaagaaagagtatctgctggaagaacgggacatcaacaggttctccgtgcagaaagacttcatcaaccggaacctggtggataccagatacgccaccagaggcctgatgaacctgctgcggagctacttcagagtgaacaacctggacgtgaaagtgaagtccatcaatggcggcttcaccagctttctgcggcggaagtggaagtttaagaaagagcggaacaaggggtacaagcaccacgccgaggacgccctgatcattgccaacgccgatttcatcttcaaagagtggaagaaactggacaaggccaaaaaagtgatggaaaaccagatgttcgaggaaaagcaggccgagagcatgcccgagatcgaaaccgagcaggagtacaaagagatcttcatcaccccccaccagatcaagcacattaaggacttcaaggactacaagtacagccaccgggtggacaagaagcctaatagagagctgattaacgacaccctgtactccacccggaaggacgacaagggcaacaccctgatcgtgaacaatctgaacggcctgtacgacaaggacaatgacaagctgaaaaagctgatcaacaagagccccgaaaagctgctgatgtaccaccacgacccccagacctaccagaaactgaagctgattatggaacagtacggcgacgagaagaatcccctgtacaagtactacgaggaaaccgggaactacctgaccaagtactccaaaaaggacaacggccccgtgatcaagaagattaagtattacggcaacaaactgaacgcccatctggacatcaccgacgactaccccaacagcagaaacaaggtcgtgaagctgtccctgaagccctacagattcgacgtgtacctggacaatggcgtgtacaagttcgtgaccgtgaagaatctggatgtgatcaaaaaagaaaactactacgaagtgaatagcaagtgctatgaggaagctaagaagctgaagaagatcagcaaccaggccgagtttatcgcctccttctacaacaacgatctgatcaagatcaacggcgagctgtatagagtgatcggcgtgaacaacgacctgctgaaccggatcgaagtgaacatgatcgacatcacctaccgcgagtacctggaaaacatgaacgacaagaggccccccaggatcattaagacaatcgcctccaagacccagagcattaagaagtacagcacagacattctgggcaacctgtatgaagtgaaatctaagaagcaccctcagatcatcaaaaagggcaaaaggccggcggccacgaaaaaggccggccaggcaaaaaagaaaaagggatcctacccatacgatgttccagattacgcttacccatacgatgttccagattacgcttacccatacgatgttccagattacgcttaa`;
+    
     calculateBtn.addEventListener('click', () => {
         try {
-            // 获取输入的代码
-            const code = codeInput.value.trim();
+            const dnaSequence = codeInput.value.trim();
             
-            if (!code) {
-                outputDisplay.textContent = '请输入代码';
+            if (!dnaSequence) {
+                outputDisplay.textContent = '请输入DNA序列';
                 return;
             }
             
-            // 设置一个安全的计算环境
-            const sandbox = {
-                result: null,
-                console: {
-                    log: function(...args) {
-                        sandbox.result = (sandbox.result || '') + args.join(' ') + '\n';
-                    }
-                }
-            };
-            
-            // 包装用户代码，捕获计算结果
-            const wrappedCode = `
-                try {
-                    ${code}
-                } catch (error) {
-                    console.log("计算错误:", error.message);
-                }
-            `;
-            
-            // 使用Function构造器创建一个新函数
-            const computeFunction = new Function(...Object.keys(sandbox), wrappedCode);
-            
-            // 执行计算
-            computeFunction(...Object.values(sandbox));
+            // 优化DNA序列
+            const optimizedSequence = optimizeDNA(dnaSequence);
             
             // 显示结果
-            if (sandbox.result !== null) {
-                outputDisplay.textContent = sandbox.result;
-            } else {
-                // 如果代码没有使用console.log，尝试直接评估表达式
-                try {
-                    const directResult = eval(code);
-                    outputDisplay.textContent = directResult !== undefined ? directResult : '计算完成，但没有返回值';
-                } catch (error) {
-                    outputDisplay.textContent = '计算错误: ' + error.message;
-                }
-            }
+            outputDisplay.textContent = `原始DNA序列:\n${dnaSequence}\n\n优化后的DNA序列:\n${optimizedSequence}`;
         } catch (error) {
-            outputDisplay.textContent = '系统错误: ' + error.message;
+            outputDisplay.textContent = '错误: ' + error.message;
         }
     });
-    
-    // 添加示例代码
-    codeInput.value = `// 示例：计算斐波那契数列
-function fibonacci(n) {
-    if (n <= 1) return n;
-    return fibonacci(n-1) + fibonacci(n-2);
-}
-
-// 计算前10个斐波那契数
-for (let i = 0; i < 10; i++) {
-    console.log(\`fibonacci(\${i}) = \${fibonacci(i)}\`);
-}`;
 });
