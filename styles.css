@@ -12,50 +12,103 @@ body {
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1000px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 40px;
+    background-color: white;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
 header {
     text-align: center;
     margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
 }
 
 h1 {
     color: #2c3e50;
+    font-size: 2.2rem;
+    margin: 0;
+    line-height: 1.2;
+    display: inline-block;
+    white-space: nowrap;
 }
 
-main {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    width: 100%;
-    min-height: 100vh;
+.paper-info {
+    margin: 20px 0;
+    font-size: 1.1rem;
 }
 
-.input-section {
-    background-color: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    order: 1;
+.authors {
+    margin-bottom: 10px;
 }
 
-.output-section {
-    background-color: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    order: 2;
+.author {
+    font-weight: bold;
+}
+
+.affiliations {
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.publication-info {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+section {
+    margin-bottom: 40px;
 }
 
 h2 {
-    margin-bottom: 15px;
     color: #2c3e50;
-    font-size: 1.5rem;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #3498db;
+}
+
+h3 {
+    color: #2c3e50;
+    font-size: 1.4rem;
+    margin: 20px 0 15px;
+}
+
+.content-section {
+    margin-bottom: 30px;
+}
+
+.abstract {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+
+.demo-section {
+    background-color: #f8f9fa;
+    padding: 30px;
+    border-radius: 8px;
+    position: relative;
+}
+
+.demo-description {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #e9ecef;
+    border-radius: 4px;
+}
+
+.input-section, .output-section {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    margin-bottom: 20px;
 }
 
 textarea#code-input {
@@ -67,12 +120,13 @@ textarea#code-input {
     font-family: monospace;
     font-size: 14px;
     resize: vertical;
+    background-color: #f8f9fa;
 }
 
 button#calculate-btn {
     display: block;
     margin: 15px 0;
-    padding: 10px 20px;
+    padding: 12px 24px;
     background-color: #3498db;
     color: white;
     border: none;
@@ -91,7 +145,7 @@ button#calculate-btn:hover {
     padding: 15px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    background-color: #f9f9f9;
+    background-color: #f8f9fa;
     font-family: monospace;
     white-space: pre-wrap;
     word-wrap: break-word;
@@ -100,9 +154,112 @@ button#calculate-btn:hover {
     max-height: 500px;
 }
 
+.references {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.references ol {
+    padding-left: 20px;
+}
+
+.references li {
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+}
+
 footer {
     margin-top: 40px;
+    padding-top: 20px;
     text-align: center;
     color: #7f8c8d;
     font-size: 14px;
+    border-top: 1px solid #eee;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+    }
+    
+    h3 {
+        font-size: 1.2rem;
+    }
+}
+
+.language-switch {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+    z-index: 1000;
+}
+
+.language-switch button {
+    padding: 8px 16px;
+    border: 1px solid #3498db;
+    background-color: white;
+    color: #3498db;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+.language-switch button.active {
+    background-color: #3498db;
+    color: white;
+}
+
+.language-switch button:hover {
+    background-color: #2980b9;
+    color: white;
+}
+
+.title-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+}
+
+.section-title-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    gap: 10px;
+}
+
+.section-title-container h2 {
+    margin: 0;
+    display: inline-block;
+}
+
+.lang-switch-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.lang-switch-btn img {
+    width: 24px;
+    height: 24px;
+    display: block;
 }

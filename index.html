@@ -1,33 +1,114 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>论文计算演示</title>
-    <link rel="stylesheet" href="styles.css">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>DNA Sequence Optimization Research</title>
+    <link rel="stylesheet" href="styles.css?v=<?php echo time(); ?>">
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>论文计算演示</h1>
-        </header>
+        <!-- <header>
+            <div class="title-container">
+                <h1 data-lang="en">DNA Sequence Optimization Based on Codon Usage</h1>
+                <h1 data-lang="zh" style="display: none;">基于密码子优化的DNA序列设计研究</h1>
+                <button id="lang-switch" class="lang-switch-btn" title="Switch Language">
+                    <img src="lan_switch.svg" alt="Language Switch">
+                </button>
+            </div>
+            <div class="paper-info">
+                <div class="authors">
+                    <span class="author" data-lang="en">Zhang San</span>
+                    <span class="author" data-lang="zh" style="display: none;">张三</span>
+                    <sup>1</sup>,
+                    <span class="author" data-lang="en">Li Si</span>
+                    <span class="author" data-lang="zh" style="display: none;">李四</span>
+                    <sup>2</sup>
+                </div>
+                <div class="affiliations">
+                    <p><sup>1</sup><span data-lang="en">School of Computer Science and Technology, University</span>
+                       <span data-lang="zh" style="display: none;">某某大学 计算机科学与技术学院</span></p>
+                    <p><sup>2</sup><span data-lang="en">Bioinformatics Research Center, Institute</span>
+                       <span data-lang="zh" style="display: none;">某某研究所 生物信息学研究中心</span></p>
+                </div>
+                <div class="publication-info">
+                    <p data-lang="en">Published in Journal of Bioinformatics, 2023, Vol.1</p>
+                    <p data-lang="zh" style="display: none;">发表于《生物信息学学报》2023年第1期</p>
+                    <p>DOI: 10.xxxx/xxxx</p>
+                </div>
+            </div>
+        </header> -->
         
-        <main>
+        <!-- <section class="abstract">
+            <h2 data-lang="en">Abstract</h2>
+            <h2 data-lang="zh" style="display: none;">摘要</h2>
+            <p data-lang="en">This study proposes a DNA sequence optimization method based on codon usage frequency. By analyzing the frequency of different codons, we developed an algorithm to automatically optimize DNA sequences to improve their expression efficiency in target hosts. Experimental results show that the optimized sequences achieved approximately 30% higher expression efficiency compared to the original sequences.</p>
+            <p data-lang="zh" style="display: none;">本研究提出了一种基于密码子使用频率的DNA序列优化方法。通过分析不同密码子的使用频率，我们开发了一个算法来自动优化DNA序列，以提高其在目标宿主中的表达效率。实验结果表明，优化后的序列在表达效率上比原始序列提高了约30%。</p>
+        </section> -->
+
+        <!-- <section class="research-content">
+            <h2 data-lang="en">Research Content</h2>
+            <h2 data-lang="zh" style="display: none;">研究内容</h2>
+            <div class="content-section">
+                <h3 data-lang="en">Research Background</h3>
+                <h3 data-lang="zh" style="display: none;">研究背景</h3>
+                <p data-lang="en">The codon usage bias in DNA sequences significantly affects gene expression efficiency. Different organisms exhibit distinct preferences for codon usage, which can influence protein expression levels. Therefore, when designing synthetic DNA sequences, it is essential to consider the codon usage preferences of the target host.</p>
+                <p data-lang="zh" style="display: none;">DNA序列的密码子使用偏好性对基因表达效率有重要影响。不同生物体对密码子的使用存在明显偏好，这种偏好性会影响蛋白质的表达水平。因此，在设计合成DNA序列时，需要考虑目标宿主的密码子使用偏好。</p>
+            </div>
+            
+            <div class="content-section">
+                <h3 data-lang="en">Research Methods</h3>
+                <h3 data-lang="zh" style="display: none;">研究方法</h3>
+                <p data-lang="en">This study employs a frequency-based codon optimization method, selecting optimal codon combinations by analyzing the codon usage frequency of the target host. The optimization process considers multiple factors, including codon usage frequency, GC content, and secondary structure.</p>
+                <p data-lang="zh" style="display: none;">本研究采用基于频率的密码子优化方法，通过分析目标宿主的密码子使用频率，选择最优的密码子组合。优化过程考虑了多个因素，包括密码子使用频率、GC含量、二级结构等。</p>
+            </div>
+        </section> -->
+
+        <section class="demo-section">
+            <div class="section-title-container">
+                <h2 data-lang="en">Online Demo</h2>
+                <h2 data-lang="zh" style="display: none;">在线演示</h2>
+                <button id="lang-switch" class="lang-switch-btn" title="Switch Language">
+                    <img src="lan_switch.svg" alt="Language Switch">
+                </button>
+            </div>
+            <div class="demo-description">
+                <p data-lang="en">You can use the tool below to optimize DNA sequences. The input box supports FASTA format sequences, and the output box will display the optimized sequence.</p>
+                <p data-lang="zh" style="display: none;">您可以使用下方的工具来优化DNA序列。输入框支持FASTA格式的序列输入，输出框将显示优化后的序列。</p>
+            </div>
+            
             <div class="input-section">
-                <h2>输入</h2>
-                <textarea id="code-input" placeholder="请在此输入DNA序列..."></textarea>
-                <button id="calculate-btn">计算</button>
+                <h3 data-lang="en">Input Sequence</h3>
+                <h3 data-lang="zh" style="display: none;">输入序列</h3>
+                <textarea id="code-input" placeholder="Please enter DNA sequence here..."></textarea>
+                <button id="calculate-btn" data-lang="en">Optimize Sequence</button>
+                <button id="calculate-btn" data-lang="zh" style="display: none;">优化序列</button>
             </div>
             
             <div class="output-section">
-                <h2>输出</h2>
+                <h3 data-lang="en">Optimization Result</h3>
+                <h3 data-lang="zh" style="display: none;">优化结果</h3>
                 <div id="output-display"></div>
             </div>
-        </main>
+        </section>
+
+        <!-- <section class="references">
+            <h2 data-lang="en">References</h2>
+            <h2 data-lang="zh" style="display: none;">参考文献</h2>
+            <ol>
+                <li>Smith, J., et al. (2020). Codon optimization for improved protein expression. Nature Methods, 17(3), 123-130.</li>
+                <li>Wang, L., et al. (2021). Computational tools for DNA sequence design. Bioinformatics, 37(5), 789-796.</li>
+            </ol>
+        </section> -->
         
-        <footer>
-            <p>© 2023 论文演示项目</p>
-        </footer>
+        <!-- <footer>
+            <p data-lang="en">© 2023 DNA Sequence Optimization Research</p>
+            <p data-lang="zh" style="display: none;">© 2023 基于密码子优化的DNA序列设计研究</p>
+            <p>Contact: example@university.edu</p>
+        </footer> -->
     </div>
     
     <script src="script.js"></script>

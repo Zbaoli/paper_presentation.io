@@ -1,3 +1,52 @@
+// 语言切换功能
+document.addEventListener('DOMContentLoaded', function() {
+    const langSwitchBtn = document.getElementById('lang-switch');
+    let currentLang = 'en';
+
+    // 设置输入框的占位符文本
+    const codeInput = document.getElementById('code-input');
+    updatePlaceholder();
+
+    // 语言切换按钮点击事件
+    langSwitchBtn.addEventListener('click', function() {
+        currentLang = currentLang === 'en' ? 'zh' : 'en';
+        switchLanguage();
+    });
+
+    function switchLanguage() {
+        // 切换所有带有data-lang属性的元素
+        document.querySelectorAll('[data-lang]').forEach(element => {
+            if (element.getAttribute('data-lang') === currentLang) {
+                element.style.display = '';
+            } else {
+                element.style.display = 'none';
+            }
+        });
+
+        // 更新输入框占位符
+        updatePlaceholder();
+    }
+
+    function updatePlaceholder() {
+        codeInput.placeholder = currentLang === 'en' 
+            ? 'Please enter DNA sequence here...' 
+            : '请输入DNA序列...';
+    }
+
+    // 优化按钮点击事件
+    document.getElementById('calculate-btn').addEventListener('click', function() {
+        const input = codeInput.value.trim();
+        if (!input) {
+            alert(currentLang === 'en' ? 'Please enter a DNA sequence.' : '请输入DNA序列。');
+            return;
+        }
+
+        // 这里添加你的优化逻辑
+        const output = `Optimized sequence for ${input}`;
+        document.getElementById('output-display').textContent = output;
+    });
+});
+
 // 密码子频率表
 const codonFrequencies = {
     'M': {'ATG': 1.0000},
@@ -54,7 +103,7 @@ for (const [codon, aa] of Object.entries(geneticCode)) {
 function optimizeDNA(dnaSequence) {
     // 确保序列长度是3的倍数
     if (dnaSequence.length % 3 !== 0) {
-        throw new Error("DNA序列的长度必须是3的倍数");
+        throw new Error("DNA sequence length must be a multiple of 3");
     }
 
     // 分割成密码子
@@ -89,20 +138,21 @@ function optimizeDNA(dnaSequence) {
     return optimizedCodons.join('');
 }
 
+// 页面加载完成后执行
 document.addEventListener('DOMContentLoaded', () => {
     const codeInput = document.getElementById('code-input');
-    const calculateBtn = document.getElementById('calculate-btn');
+    const calculateBtn = document.querySelector('#calculate-btn[data-lang="en"]');
     const outputDisplay = document.getElementById('output-display');
     
     // 添加示例DNA序列
-    codeInput.value = `atggccccaaagaagaagcggaaggtcggtatccacggagtcccagcagccaagcggaactacatcctgggcctggacatcggcatcaccagcgtgggctacggcatcatcgactacgagacacgggacgtgatcgatgccggcgtgcggctgttcaaagaggccaacgtggaaaacaacgagggcaggcggagcaagagaggcgccagaaggctgaagcggcggaggcggcatagaatccagagagtgaagaagctgctgttcgactacaacctgctgaccgaccacagcgagctgagcggcatcaacccctacgaggccagagtgaagggcctgagccagaagctgagcgaggaagagttctctgccgccctgctgcacctggccaagagaagaggcgtgcacaacgtgaacgaggtggaagaggacaccggcaacgagctgtccaccaaagagcagatcagccggaacagcaaggccctggaagagaaatacgtggccgaactgcagctggaacggctgaagaaagacggcgaagtgcggggcagcatcaacagattcaagaccagcgactacgtgaaagaagccaaacagctgctgaaggtgcagaaggcctaccaccagctggaccagagcttcatcgacacctacatcgacctgctggaaacccggcggacctactatgagggacctggcgagggcagccccttcggctggaaggacatcaaagaatggtacgagatgctgatgggccactgcacctacttccccgaggaactgcggagcgtgaagtacgcctacaacgccgacctgtacaacgccctgaacgacctgaacaatctcgtgatcaccagggacgagaacgagaagctggaatattacgagaagttccagatcatcgagaacgtgttcaagcagaagaagaagcccaccctgaagcagatcgccaaagaaatcctcgtgaacgaagaggatattaagggctacagagtgaccagcaccggcaagcccgagttcaccaacctgaaggtgtaccacgacatcaaggacattaccgcccggaaagagattattgagaacgccgagctgctggatcagattgccaagatcctgaccatctaccagagcagcgaggacatccaggaagaactgaccaatctgaactccgagctgacccaggaagagatcgagcagatctctaatctgaagggctataccggcacccacaacctgagcctgaaggccatcaacctgatcctggacgagctgtggcacaccaacgacaaccagatcgctatcttcaaccggctgaagctggtgcccaagaaggtggacctgtcccagcagaaagagatccccaccaccctggtggacgacttcatcctgagccccgtcgtgaagagaagcttcatccagagcatcaaagtgatcaacgccatcatcaagaagtacggcctgcccaacgacatcattatcgagctggcccgcgagaagaactccaaggacgcccagaaaatgatcaacgagatgcagaagcggaaccggcagaccaacgagcggatcgaggaaatcatccggaccaccggcaaagagaacgccaagtacctgatcgagaagatcaagctgcacgacatgcaggaaggcaagtgcctgtacagcctggaagccatccctctggaagatctgctgaacaaccccttcaactatgaggtggaccacatcatccccagaagcgtgtccttcgacaacagcttcaacaacaaggtgctcgtgaagcaggaagaaaacagcaagaagggcaaccggaccccattccagtacctgagcagcagcgacagcaagatcagctacgaaaccttcaagaagcacatcctgaatctggccaagggcaagggcagaatcagcaagaccaagaaagagtatctgctggaagaacgggacatcaacaggttctccgtgcagaaagacttcatcaaccggaacctggtggataccagatacgccaccagaggcctgatgaacctgctgcggagctacttcagagtgaacaacctggacgtgaaagtgaagtccatcaatggcggcttcaccagctttctgcggcggaagtggaagtttaagaaagagcggaacaaggggtacaagcaccacgccgaggacgccctgatcattgccaacgccgatttcatcttcaaagagtggaagaaactggacaaggccaaaaaagtgatggaaaaccagatgttcgaggaaaagcaggccgagagcatgcccgagatcgaaaccgagcaggagtacaaagagatcttcatcaccccccaccagatcaagcacattaaggacttcaaggactacaagtacagccaccgggtggacaagaagcctaatagagagctgattaacgacaccctgtactccacccggaaggacgacaagggcaacaccctgatcgtgaacaatctgaacggcctgtacgacaaggacaatgacaagctgaaaaagctgatcaacaagagccccgaaaagctgctgatgtaccaccacgacccccagacctaccagaaactgaagctgattatggaacagtacggcgacgagaagaatcccctgtacaagtactacgaggaaaccgggaactacctgaccaagtactccaaaaaggacaacggccccgtgatcaagaagattaagtattacggcaacaaactgaacgcccatctggacatcaccgacgactaccccaacagcagaaacaaggtcgtgaagctgtccctgaagccctacagattcgacgtgtacctggacaatggcgtgtacaagttcgtgaccgtgaagaatctggatgtgatcaaaaaagaaaactactacgaagtgaatagcaagtgctatgaggaagctaagaagctgaagaagatcagcaaccaggccgagtttatcgcctccttctacaacaacgatctgatcaagatcaacggcgagctgtatagagtgatcggcgtgaacaacgacctgctgaaccggatcgaagtgaacatgatcgacatcacctaccgcgagtacctggaaaacatgaacgacaagaggccccccaggatcattaagacaatcgcctccaagacccagagcattaagaagtacagcacagacattctgggcaacctgtatgaagtgaaatctaagaagcaccctcagatcatcaaaaagggcaaaaggccggcggccacgaaaaaggccggccaggcaaaaaagaaaaagggatcctacccatacgatgttccagattacgcttacccatacgatgttccagattacgcttacccatacgatgttccagattacgcttaa`;
+    codeInput.value = ``;
     
     calculateBtn.addEventListener('click', () => {
         try {
             const dnaSequence = codeInput.value.trim();
             
             if (!dnaSequence) {
-                outputDisplay.textContent = '请输入DNA序列';
+                outputDisplay.textContent = 'Please enter a DNA sequence';
                 return;
             }
             
@@ -110,9 +160,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const optimizedSequence = optimizeDNA(dnaSequence);
             
             // 显示结果
-            outputDisplay.textContent = `原始DNA序列:\n${dnaSequence}\n\n优化后的DNA序列:\n${optimizedSequence}`;
+            // outputDisplay.textContent = `Original DNA Sequence:\n${dnaSequence}\n\nOptimized DNA Sequence:\n${optimizedSequence}`;
+            outputDisplay.textContent = `${optimizedSequence}`;
         } catch (error) {
-            outputDisplay.textContent = '错误: ' + error.message;
+            outputDisplay.textContent = 'Error: ' + error.message;
         }
     });
 });
